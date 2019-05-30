@@ -2,9 +2,9 @@ import React from "react";
 import "./App.css";
 import * as apiCalls from "../../utils/api/apiCalls";
 import { Route } from "react-router";
-import SearchBar from "../../containers/SearchBar/SearchBar";
 import News from "../../containers/News/News";
 import DataSection from "../DataSection/DataSection";
+import NavBar from "../NavBar/NavBar";
 
 class App extends React.Component {
   componentDidMount() {
@@ -14,14 +14,17 @@ class App extends React.Component {
   getExistInfo = async () => {
     const AAdata = await apiCalls.fetchAllData();
     const IEXdata = await apiCalls.fetchIEX();
+    const IEXnews = await apiCalls.fetchIEXnews();
     console.log("alphaAdvantage:", AAdata);
-    console.log("IEX:", IEXdata);
+    console.log("IEXdata:", IEXdata);
+    console.log("IEXnews:", IEXnews);
   };
   render() {
     return (
       <div className="App">
-        <Route path="/" component={SearchBar} />
+        <Route path="/" component={NavBar} />
         <Route exact path="/" component={News} />
+        <Route path="/:sector" component={News} />
         <Route path="/" component={DataSection} />
       </div>
     );

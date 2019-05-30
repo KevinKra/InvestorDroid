@@ -1,11 +1,12 @@
 import React, { Component } from "react";
+import "./News.scss";
 
 class News extends Component {
   render() {
     return (
-      <div className="News">
+      <section className="News">
         <h3>News Component</h3>
-      </div>
+      </section>
     );
   }
 }

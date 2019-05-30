@@ -1,11 +1,12 @@
 import React, { Component } from "react";
+import "./SearchBar.scss";
 
 class SearchBar extends Component {
   render() {
     return (
-      <div className="SearchBar">
-        <h3>SearchBar Component</h3>
-      </div>
+      <form className="SearchBar">
+        <input type="search" placeholder="Search..." />
+      </form>
     );
   }
 }
