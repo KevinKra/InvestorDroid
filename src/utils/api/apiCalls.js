@@ -1,4 +1,5 @@
 import { API_KEY_AA, API_KEY_IEX } from "./apikey";
+import { randomTickerGenerator } from "../helpers";
 
 export const fetchAllData = async () => {
   const response = await fetch(
@@ -20,12 +21,20 @@ export const fetchIEX = async () => {
   return await response.json();
 };
 
+const ticker = randomTickerGenerator();
 export const fetchIEXnews = async () => {
+  console.log("ticker: ", ticker);
   const response = await fetch(
-    `https://cloud.iexapis.com/stable/stock/msft/news/last/1?token=${API_KEY_IEX}`
+    `https://cloud.iexapis.com/stable/stock/${ticker}/news/last/5?token=${API_KEY_IEX}`
   );
   if (!response.ok) {
     throw new Error("Unable to fetch IEX stock news");
   }
-  return await response.json();
+  const articles = await response.json();
+  const hasSummary = articles.filter(article => {
+    return article.summary !== "No summary available.";
+  });
+  if (!hasSummary[0]) return articles[0];
+  // console.log(hasSummary[0].summary);
+  return hasSummary[0];
 };
