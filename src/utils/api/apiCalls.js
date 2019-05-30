@@ -19,3 +19,13 @@ export const fetchIEX = async () => {
   }
   return await response.json();
 };
+
+export const fetchIEXnews = async () => {
+  const response = await fetch(
+    `https://cloud.iexapis.com/stable/stock/msft/news/last/1?token=${API_KEY_IEX}`
+  );
+  if (!response.ok) {
+    throw new Error("Unable to fetch IEX stock news");
+  }
+  return await response.json();
+};
