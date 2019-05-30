@@ -1,0 +1,26 @@
+@import "../../variables";
+.NavBar {
+  padding: 0.5rem 0;
+  border: 1px solid blue;
+  display: flex;
+  justify-content: center;
+  width: 80%;
+  .main-title {
+    display: flex;
+    margin-left: 3rem;
+    align-items: center;
+    h3 {
+      // border: 1px solid red;
+      color: $black;
+      font-size: 26px;
+      padding-left: 1rem;
+      margin: 0;
+    }
+    i {
+      margin: 0;
+      font-size: 32px;
+      color: $black;
+      // border: 1px solid red;
+    }
+  }
+}
