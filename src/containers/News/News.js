@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import "./News.scss";
-import { connect } from "react-redux";
 import { fetchIEXnews } from "../../utils/api/apiCalls";
 
 class News extends Component {
@@ -28,7 +27,7 @@ class News extends Component {
             <h3>{headline}</h3>
             <p>Stock Ticker: {related}</p>
           </header>
-          <div class="body">
+          <div className="body">
             <p className="summary">{summary}</p>
             <p className="date">{timeStamp}</p>
             <p className="source">{source}</p>
@@ -39,8 +38,4 @@ class News extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  newsReducers: state.newsReducers
-});
-
-export default connect(mapStateToProps)(News);
+export default News;
