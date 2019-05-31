@@ -23,7 +23,6 @@ export const fetchIEX = async () => {
 
 const ticker = randomTickerGenerator();
 export const fetchIEXnews = async () => {
-  console.log("ticker: ", ticker);
   const response = await fetch(
     `https://cloud.iexapis.com/stable/stock/${ticker}/news/last/5?token=${API_KEY_IEX}`
   );
@@ -35,6 +34,66 @@ export const fetchIEXnews = async () => {
     return article.summary !== "No summary available.";
   });
   if (!hasSummary[0]) return articles[0];
-  // console.log(hasSummary[0].summary);
   return hasSummary[0];
+};
+
+const companyData = async ticker => {
+  const response = await fetch(
+    `https://cloud.iexapis.com/stable/stock/${ticker}/company?token=${API_KEY_IEX}`
+  );
+  if (!response.ok) {
+    throw new Error("Unable to fetch IEX company news.");
+  }
+  return await response.json();
+};
+
+const companyBalanceSheet = async ticker => {
+  const response = await fetch(
+    `https://cloud.iexapis.com/stable/stock/msft/balance-sheet?token=${API_KEY_IEX}`
+  );
+  if (!response.ok) throw new Error("Unable to fetch IEX balance sheet.");
+  const parsed = await response.json();
+  return parsed.balancesheet[0];
+};
+
+const companyKeyStats = async ticker => {
+  const response = await fetch(
+    `https://cloud.iexapis.com/stable/stock/msft/stats?token=${API_KEY_IEX}`
+  );
+  if (!response.ok) throw new Error("Unable to fetch IEX key stats.");
+  return await response.json();
+};
+
+const companyWeeklyStocks = async ticker => {
+  const response = await fetch(
+    `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${ticker}&interval=5min&apikey=${API_KEY_AA}`
+  );
+  if (!response.ok) throw new Error("Unable to fetch AA daily stocks");
+  const parsed = await response.json();
+  const filterData = () => {
+    const timeSeries = parsed["Time Series (Daily)"];
+    const last7days = Object.keys(timeSeries).slice(0, 7);
+    const filtered = last7days.map(day => {
+      return { day, ...timeSeries[day] };
+    });
+    return filtered;
+  };
+  return filterData();
+};
+
+export const compileCompanyData = async ticker => {
+  const response = Promise.all([
+    companyData(ticker),
+    companyBalanceSheet(ticker),
+    companyKeyStats(ticker),
+    companyWeeklyStocks(ticker)
+  ]);
+  const data = await response;
+  return {
+    ticker,
+    generalData: data[0],
+    balanceSheet: data[1],
+    keyStats: data[2],
+    weeklyStocks: data[3]
+  };
 };
