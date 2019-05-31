@@ -10,4 +10,14 @@ const newsReducers = (state = [], action) => {
   }
 };
 
-export const rootReducer = combineReducers({ newsReducers });
+const stockInformation = (state = [], action) => {
+  const { type, payload } = action;
+  switch (type) {
+    case "COMPANY_DATA":
+      return [...state, payload.company];
+    default:
+      return state;
+  }
+};
+
+export const rootReducer = combineReducers({ newsReducers, stockInformation });

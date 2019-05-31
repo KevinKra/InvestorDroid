@@ -4,3 +4,10 @@ export const collectNews = news => {
     payload: { news }
   };
 };
+
+export const collectCompanyData = company => {
+  return {
+    type: "COMPANY_DATA",
+    payload: { company }
+  };
+};
