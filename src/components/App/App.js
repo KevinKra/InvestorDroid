@@ -32,16 +32,12 @@ class App extends React.Component {
     );
   }
 }
-const mapStateToProps = state => ({
-  newsReducers: state.newsReducers
-});
 
 const mapDispatchToProps = dispatch => ({
-  collectNews: news => dispatch(actions.collectNews(news)),
   collectCompanyData: company => dispatch(actions.collectCompanyData(company))
 });
 
 export default connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps
 )(App);
