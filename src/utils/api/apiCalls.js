@@ -1,28 +1,8 @@
 import { API_KEY_AA, API_KEY_IEX } from "./apikey";
 import { randomTickerGenerator } from "../helpers";
 
-export const fetchAllData = async () => {
-  const response = await fetch(
-    `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=AAPL&interval=5min&apikey=${API_KEY_AA}`
-  );
-  if (!response.ok) {
-    throw new Error("Unable to fetch data currently.");
-  }
-  return await response.json();
-};
-
-export const fetchIEX = async () => {
-  const response = await fetch(
-    `https://cloud.iexapis.com/stable/tops?token=${API_KEY_IEX}&symbols=aapl`
-  );
-  if (!response.ok) {
-    throw new Error("Unable to fetch from IEX API");
-  }
-  return await response.json();
-};
-
-const ticker = randomTickerGenerator();
 export const fetchIEXnews = async () => {
+  const ticker = randomTickerGenerator();
   const response = await fetch(
     `https://cloud.iexapis.com/stable/stock/${ticker}/news/last/5?token=${API_KEY_IEX}`
   );
@@ -37,7 +17,7 @@ export const fetchIEXnews = async () => {
   return hasSummary[0];
 };
 
-const companyData = async ticker => {
+export const companyData = async ticker => {
   const response = await fetch(
     `https://cloud.iexapis.com/stable/stock/${ticker}/company?token=${API_KEY_IEX}`
   );
@@ -49,7 +29,7 @@ const companyData = async ticker => {
 
 const companyBalanceSheet = async ticker => {
   const response = await fetch(
-    `https://cloud.iexapis.com/stable/stock/msft/balance-sheet?token=${API_KEY_IEX}`
+    `https://cloud.iexapis.com/stable/stock/${ticker}/balance-sheet?token=${API_KEY_IEX}`
   );
   if (!response.ok) throw new Error("Unable to fetch IEX balance sheet.");
   const parsed = await response.json();
@@ -57,8 +37,9 @@ const companyBalanceSheet = async ticker => {
 };
 
 const companyKeyStats = async ticker => {
+  console.log("hello");
   const response = await fetch(
-    `https://cloud.iexapis.com/stable/stock/msft/stats?token=${API_KEY_IEX}`
+    `https://cloud.iexapis.com/stable/stock/${ticker}/stats?token=${API_KEY_IEX}`
   );
   if (!response.ok) throw new Error("Unable to fetch IEX key stats.");
   return await response.json();
@@ -69,8 +50,9 @@ const companyWeeklyStocks = async ticker => {
     `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${ticker}&interval=5min&apikey=${API_KEY_AA}`
   );
   if (!response.ok) throw new Error("Unable to fetch AA daily stocks");
-  const parsed = await response.json();
-  const filterData = () => {
+  const filterData = async () => {
+    const parsed = await response.json();
+    console.log("parsed", parsed);
     const timeSeries = parsed["Time Series (Daily)"];
     const last7days = Object.keys(timeSeries).slice(0, 7);
     const filtered = last7days.map(day => {
